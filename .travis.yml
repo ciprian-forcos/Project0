@@ -1,17 +1,13 @@
 os: windows
 language: shell
-shell: powershell
 
 before_install:
-  # Upgrade Chocolatey
   - choco upgrade chocolatey
-  # Install Python 3.8
   - choco install python --version=3.8 -y
-  # Refresh environment variables
-  - '& $env:ChocolateyInstall\bin\RefreshEnv.cmd'
-
 
 install:
+  # Manually update the PATH
+  - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
   # Verify Python installation
   - python --version
   # Upgrade pip
@@ -26,7 +22,7 @@ script:
 
 deploy:
   provider: releases
-  api_key: $TravisCI_TOKEN
+  api_key: $GITHUB_TOKEN
   file: dist\Project0.exe
   skip_cleanup: true
   on:
