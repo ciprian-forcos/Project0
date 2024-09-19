@@ -1,0 +1,58 @@
+Bellow are the prompts to Chat GPT o1
+A namesake of which this project has. 
+
+
+================================================================================================================================================================================================================================================================================================
+Prompt 1
+
+I need you to write ma a desktop app. 
+Something Executable that will run in an exe.
+This application will hijack the combination of keys ' Ctrl + o" ; 
+Once this key combo is hit, the application will behave the same as the windwows snipping tool -> Screenshotting the entire display, and then allow the cropping of a portion of this screenshot using the mouse. 
+For version 1, we will then save this cropped image on desktop, with a random, 8 characters name .jpeg.
+================================================================================================================================================================================================================================================================================================
+
+
+Prompt 2
+================================================================================================================================================================================================================================================================================================
+The ultimate goal of this project is to create a quick, screenshot based communication with chatgpt4o, and as your capabilities evolve, you.
+
+
+So, lets iterate. 
+
+For the second version: 
+1. A Settings Menu:
+
+    1. Lets add a small settings menu that will open after the application is in screenshot mode (So after the Ctrl + o keys have been triggered), and the RIGHT click is clicked.
+    2. On that right mouse click it will open a context menu like menu, wherever the mouse pointer is. 
+    This menu will be of similar size to the windows "right click" context menu. As for design, use whatever you think looks good, but discrete and modest.
+    3. The options on this menu will be : 
+        1. API Key -> the API Key to authenticate to chat GPT
+        2. httpRequest UL -> What link are we connecting to? Use whatever technology necessary in order to connect to the OpenAI Platform and communicate via http requests.
+        3. Save screenshot location -> A folder path on disk where to store the screenshots
+        4. A Save settings button -> saves current settings, and reenters the screenshot snip wizard
+        5. Cancel -> reverts settings to last known configuration, and reenters the screenshot wizzard
+
+2. General settings: 
+
+    Pressing the any of the following keys will exit the wizard and/or settings menu without saving anything:
+    ESC key
+    ctrl + q
+    ctrl + c
+    shift + 1
+
+
+A new Window: 
+    1. The screenshot will now be kept on screen inside a new Windows window. 
+        -> The image will be kept in its natural size, but up to a maximum of 800x600 pixels. Anything larger will be compressed to this size.
+    2. On the right of the screenshot,delimited by some vertical line, but still inside this new window we will have the response to the screenshot.
+        -> Visually, for the user, we will have a loading circle until the response from the AI model used is returned, then displayed
+        -> The reply will appear like in the 
+
+
+
+
+
+
+
+
