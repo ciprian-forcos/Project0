@@ -1,19 +1,31 @@
 os: windows
-language: python
-python:
-  - "3.8"
+language: shell
+shell: powershell
+
+before_install:
+  # Upgrade Chocolatey
+  - choco upgrade chocolatey
+  # Install Python 3.8
+  - choco install python --version=3.8 -y
+  # Refresh environment variables
+  - "& $env:ChocolateyInstall\bin\RefreshEnv.cmd"
 
 install:
-  - pip install --upgrade pip
+  # Verify Python installation
+  - python --version
+  # Upgrade pip
+  - python -m pip install --upgrade pip
+  # Install dependencies
   - pip install pyinstaller
   - pip install PyQt5 Pillow keyboard
 
 script:
+  # Build the executable
   - pyinstaller --onefile --noconsole Project0.py
 
 deploy:
   provider: releases
-  api_key: $GITHUB_TOKEN
+  api_key: $TravisCI_TOKEN
   file: dist\Project0.exe
   skip_cleanup: true
   on:
