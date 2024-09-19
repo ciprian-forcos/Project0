@@ -1,35 +1,19 @@
-# Specify the operating system
 os: windows
+language: python
+python:
+  - "3.8"
 
-# Use the minimal Windows image
-osx_image: xcode9.4
-
-# Set the language to shell since we're using Windows
-language: shell
-
-# Install dependencies and set up the environment
-before_install:
-  # Update Chocolatey
-  - choco upgrade chocolatey
-  # Install Python 3.8
-  - choco install python --version=3.8 -y
-  # Refresh the environment variables
-  - refreshenv
-
-# Install Python packages
 install:
-  - python -m pip install --upgrade pip
+  - pip install --upgrade pip
   - pip install pyinstaller
   - pip install PyQt5 Pillow keyboard
 
-# Build the executable
 script:
   - pyinstaller --onefile --noconsole Project0.py
 
-# Deploy the executable to GitHub Releases (optional)
 deploy:
   provider: releases
-  api_key: $TravisCI_TOKEN
+  api_key: $GITHUB_TOKEN
   file: dist\Project0.exe
   skip_cleanup: true
   on:
