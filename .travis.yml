@@ -8,7 +8,8 @@ before_install:
   # Install Python 3.8
   - choco install python --version=3.8 -y
   # Refresh environment variables
-  - "& $env:ChocolateyInstall\bin\RefreshEnv.cmd"
+  - '& $env:ChocolateyInstall\bin\RefreshEnv.cmd'
+
 
 install:
   # Verify Python installation
