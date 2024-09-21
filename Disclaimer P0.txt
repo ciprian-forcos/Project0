@@ -42,12 +42,18 @@ For the second version:
     shift + 1
 
 
-A new Window: 
+3. A new Window: 
     1. The screenshot will now be kept on screen inside a new Windows window. 
         -> The image will be kept in its natural size, but up to a maximum of 800x600 pixels. Anything larger will be compressed to this size.
-    2. On the right of the screenshot,delimited by some vertical line, but still inside this new window we will have the response to the screenshot.
+    2. On the right of the screenshot, delimited by some vertical line, but still inside this new window we will have the response to the screenshot.
         -> Visually, for the user, we will have a loading circle until the response from the AI model used is returned, then displayed
-        -> The reply will appear like in the 
+        -> The reply will appear like in the chat window of chat gpt, with code snippets, rich text, a scroll bar to scroll the through answer and a copy code button. 
+        -> Also, like with chat gpt 4, there should be the the Reply functionality.
+
+First things is first: 
+Please use as many tokens / replies as you see fit in order to get this answer right. 
+
+Please feel free to separate the code into as many files as you see fit (such as for styling, any particular framework you want to use, etc.) And on this note please keep in mind that the name of this second version of the project is Project 0 1
 
 
 
