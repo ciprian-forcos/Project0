@@ -1,36 +1,37 @@
 # main.py
 import sys
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtCore
 from snipping_tool import SnippingTool
-from settings import SettingsMenu  # Corrected import
+from pynput import keyboard
+import threading
 
-class SnipApp(QtWidgets.QApplication):
-    def __init__(self, sys_argv):
-        super().__init__(sys_argv)
-        self.snipping_tool = None
-        # If you need to instantiate SettingsMenu here, uncomment the next line
-        # self.settings_menu = SettingsMenu()
-        self.init_hotkeys()
+class HotkeyListener(QtCore.QObject):
+    hotkey_pressed = QtCore.pyqtSignal()
 
-    def init_hotkeys(self):
-        # Use PyQt's native hotkey system
-        shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+O'), None)
-        shortcut.activated.connect(self.start_snipping_tool)
-        # Keep a reference to prevent garbage collection
-        self.hotkey = shortcut
+    def __init__(self):
+        super().__init__()
+        self.listener = keyboard.Listener(on_press=self.on_press)
+        self.listener_thread = threading.Thread(target=self.listener.start)
+        self.listener_thread.daemon = True  # Daemonize thread
 
-    def start_snipping_tool(self):
-        if self.snipping_tool is None:
-            screen = self.primaryScreen()
-            screenshot = screen.grabWindow(0)
-            self.snipping_tool = SnippingTool(screenshot)
-            self.snipping_tool.show()
-            self.snipping_tool.closed.connect(self.snipping_tool_closed)
+    def start(self):
+        self.listener_thread.start()
 
-    def snipping_tool_closed(self):
-        self.snipping_tool = None
+    def on_press(self, key):
+        try:
+            if key == keyboard.KeyCode.from_char('o') and keyboard.Controller().ctrl_pressed:
+                self.hotkey_pressed.emit()
+        except AttributeError:
+            pass  # Handle special keys that don't have 'char' attribute
 
-if __name__ == '__main__':
-    app = SnipApp(sys.argv)
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    snip_tool = SnippingTool()
+    listener = HotkeyListener()
+    listener.hotkey_pressed.connect(snip_tool.start_snipping)
+    listener.start()
     print("Project01 is running. Press Ctrl+O to snip.")
     sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()

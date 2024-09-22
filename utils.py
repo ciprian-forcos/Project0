@@ -11,15 +11,21 @@ def generate_filename(extension='jpeg'):
 
 def load_config():
     if not os.path.exists(CONFIG_FILE):
-        default_config = {
-            "api_key": "",
-            "api_url": "https://api.openai.com/v1/engines/davinci/completions",
-            "save_location": os.path.expanduser("~/Desktop")
+        config = {
+            'api_key': '',
+            'api_url': 'https://api.openai.com/v1/chat/completions',
+            'save_location': os.path.expanduser('~/Desktop')
         }
-        save_config(default_config)
-    with open(CONFIG_FILE, 'r') as f:
-        return json.load(f)
+        save_config(config)
+    else:
+        with open(CONFIG_FILE, 'r') as f:
+            config = json.load(f)
+    return config
 
 def save_config(config):
     with open(CONFIG_FILE, 'w') as f:
         json.dump(config, f, indent=4)
+
+def get_save_location():
+    config = load_config()
+    return config.get('save_location', os.path.expanduser('~/Desktop'))
