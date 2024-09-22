@@ -1,30 +1,15 @@
 # settings.py
-import json
-import os
-from PyQt5 import QtWidgets, QtGui, QtCore
-
-CONFIG_FILE = 'config.json'
+from PyQt5 import QtWidgets, QtCore
+import utils
 
 class SettingsMenu(QtWidgets.QWidget):
+    settings_saved = QtCore.pyqtSignal()
+    settings_canceled = QtCore.pyqtSignal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.load_config()
+        self.config = utils.load_config()
         self.init_ui()
-
-    def load_config(self):
-        if not os.path.exists(CONFIG_FILE):
-            with open(CONFIG_FILE, 'w') as f:
-                json.dump({
-                    "api_key": "",
-                    "api_url": "https://api.openai.com/v1/engines/davinci/completions",
-                    "save_location": os.path.expanduser("~/Desktop")
-                }, f)
-        with open(CONFIG_FILE, 'r') as f:
-            self.config = json.load(f)
-
-    def save_config(self):
-        with open(CONFIG_FILE, 'w') as f:
-            json.dump(self.config, f)
 
     def init_ui(self):
         self.setWindowTitle('Settings')
@@ -44,14 +29,12 @@ class SettingsMenu(QtWidgets.QWidget):
         save_location_layout.addWidget(save_location_btn)
         layout.addRow('Save Location:', save_location_layout)
 
-        buttons = QtWidgets.QHBoxLayout()
-        save_btn = QtWidgets.QPushButton('Save Settings')
-        save_btn.clicked.connect(self.save_settings)
-        cancel_btn = QtWidgets.QPushButton('Cancel')
-        cancel_btn.clicked.connect(self.cancel_settings)
-        buttons.addWidget(save_btn)
-        buttons.addWidget(cancel_btn)
-        layout.addRow(buttons)
+        buttons = QtWidgets.QDialogButtonBox()
+        save_btn = buttons.addButton('Save Settings', QtWidgets.QDialogButtonBox.AcceptRole)
+        cancel_btn = buttons.addButton('Cancel', QtWidgets.QDialogButtonBox.RejectRole)
+        buttons.accepted.connect(self.save_settings)
+        buttons.rejected.connect(self.cancel_settings)
+        layout.addWidget(buttons)
 
         self.setLayout(layout)
 
@@ -64,10 +47,10 @@ class SettingsMenu(QtWidgets.QWidget):
         self.config['api_key'] = self.api_key_input.text()
         self.config['api_url'] = self.api_url_input.text()
         self.config['save_location'] = self.save_location_input.text()
-        self.save_config()
+        utils.save_config(self.config)
+        self.settings_saved.emit()
         self.close()
-        # Re-enter screenshot wizard (handled by parent)
 
     def cancel_settings(self):
+        self.settings_canceled.emit()
         self.close()
-        # Revert settings and re-enter screenshot wizard (handled by parent)

@@ -1,28 +1,36 @@
 # main.py
 import sys
-import keyboard
-from PyQt5 import QtWidgets
-from PIL import ImageGrab
+from PyQt5 import QtWidgets, QtGui
 from snipping_tool import SnippingTool
+from settings import SettingsMenu  # Corrected import
 
-def start_snipping_tool():
-    app = QtWidgets.QApplication(sys.argv)
-    screen = QtWidgets.QApplication.primaryScreen()
-    screenshot = screen.grabWindow(0)
-    window = SnippingTool(screenshot)
-    window.show()
-    app.exec_()
+class SnipApp(QtWidgets.QApplication):
+    def __init__(self, sys_argv):
+        super().__init__(sys_argv)
+        self.snipping_tool = None
+        # If you need to instantiate SettingsMenu here, uncomment the next line
+        # self.settings_menu = SettingsMenu()
+        self.init_hotkeys()
 
-def on_hotkey():
-    keyboard.remove_hotkey(hotkey)
-    start_snipping_tool()
-    register_hotkey()
+    def init_hotkeys(self):
+        # Use PyQt's native hotkey system
+        shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+O'), None)
+        shortcut.activated.connect(self.start_snipping_tool)
+        # Keep a reference to prevent garbage collection
+        self.hotkey = shortcut
 
-def register_hotkey():
-    global hotkey
-    hotkey = keyboard.add_hotkey('ctrl+o', on_hotkey)
+    def start_snipping_tool(self):
+        if self.snipping_tool is None:
+            screen = self.primaryScreen()
+            screenshot = screen.grabWindow(0)
+            self.snipping_tool = SnippingTool(screenshot)
+            self.snipping_tool.show()
+            self.snipping_tool.closed.connect(self.snipping_tool_closed)
+
+    def snipping_tool_closed(self):
+        self.snipping_tool = None
 
 if __name__ == '__main__':
-    register_hotkey()
+    app = SnipApp(sys.argv)
     print("Project01 is running. Press Ctrl+O to snip.")
-    keyboard.wait()
+    sys.exit(app.exec_())
