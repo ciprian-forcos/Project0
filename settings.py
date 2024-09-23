@@ -1,15 +1,16 @@
 # settings.py
-from PyQt5 import QtWidgets, QtCore
-import utils
+from PyQt5 import QtWidgets
+from utils import load_config, save_config
 
 class SettingsMenu(QtWidgets.QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.config = utils.load_config()
+    def __init__(self):
+        super().__init__()
+        self.config = load_config()
         self.init_ui()
 
     def init_ui(self):
-        self.setWindowFlags(QtCore.Qt.Popup)
+        self.setWindowTitle('Settings')
+        self.setFixedSize(300, 200)
         layout = QtWidgets.QFormLayout()
 
         self.api_key_input = QtWidgets.QLineEdit(self.config.get('api_key', ''))
@@ -30,7 +31,6 @@ class SettingsMenu(QtWidgets.QWidget):
         save_button.clicked.connect(self.save_settings)
         cancel_button = QtWidgets.QPushButton('Cancel')
         cancel_button.clicked.connect(self.cancel_settings)
-
         buttons_layout = QtWidgets.QHBoxLayout()
         buttons_layout.addWidget(save_button)
         buttons_layout.addWidget(cancel_button)
@@ -47,12 +47,8 @@ class SettingsMenu(QtWidgets.QWidget):
         self.config['api_key'] = self.api_key_input.text()
         self.config['api_url'] = self.api_url_input.text()
         self.config['save_location'] = self.save_location_input.text()
-        utils.save_config(self.config)
+        save_config(self.config)
         self.close()
 
     def cancel_settings(self):
         self.close()
-
-    def keyPressEvent(self, event):
-        if event.key() in (QtCore.Qt.Key_Escape, QtCore.Qt.Key_C, QtCore.Qt.Key_Q):
-            self.close()
