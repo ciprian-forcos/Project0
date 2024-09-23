@@ -55,8 +55,17 @@ class SnippingTool(QtWidgets.QWidget):
             self.open_response_window()
 
     def keyPressEvent(self, event):
-        if event.key() in (QtCore.Qt.Key_Escape, QtCore.Qt.Key_C, QtCore.Qt.Key_Q):
-            self.close()
+            if event.key() == QtCore.Qt.Key_Escape:
+                self.close()
+            elif event.key() == QtCore.Qt.Key_Q and event.modifiers() & QtCore.Qt.ControlModifier:
+                self.close()
+            elif event.key() == QtCore.Qt.Key_C and event.modifiers() & QtCore.Qt.ControlModifier:
+                self.close()
+            elif event.key() == QtCore.Qt.Key_1 and event.modifiers() & QtCore.Qt.ShiftModifier:
+                # Shift+1 corresponds to '!'
+                self.close()
+            else:
+                super().keyPressEvent(event)
 
     def save_snip(self):
         rect = QtCore.QRect(self.start_point, self.end_point).normalized()

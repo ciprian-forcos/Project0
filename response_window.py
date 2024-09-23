@@ -85,6 +85,18 @@ class ResponseWindow(QtWidgets.QWidget):
             error_message = f"Error: {e}"
             self.display_error(error_message)
 
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Escape:
+            self.close()
+        elif event.key() == QtCore.Qt.Key_Q and event.modifiers() & QtCore.Qt.ControlModifier:
+            self.close()
+        elif event.key() == QtCore.Qt.Key_C and event.modifiers() & QtCore.Qt.ControlModifier:
+            self.close()
+        elif event.key() == QtCore.Qt.Key_1 and event.modifiers() & QtCore.Qt.ShiftModifier:
+            self.close()
+        else:
+            super().keyPressEvent(event)
+
     def display_error(self, message):
         # Update the UI with the error message
         QtCore.QMetaObject.invokeMethod(
