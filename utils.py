@@ -8,7 +8,7 @@ def load_config():
     if not os.path.exists(CONFIG_FILE):
         config = {
             'api_key': '',
-            'api_url': '',
+            'api_url': 'https://api.openai.com/v1',  # Default API URL
             'save_location': os.path.expanduser('~/Desktop')
         }
         save_config(config)

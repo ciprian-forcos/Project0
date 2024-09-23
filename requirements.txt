@@ -1,6 +1,5 @@
 PyQt5
-Pillow
-openai
-pynput
-pytesseract
+pillow
 keyboard
+openai>=1.0.0
+pytesseract
